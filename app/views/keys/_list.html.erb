@@ -1,0 +1,68 @@
+<table id="datatable" class="table table-bordered dt-responsive nowrap"
+  style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+  <thead>
+    <tr>
+      <th class="text-center">No</th>
+      <th class="text-left">API Key</th>
+      <th class="text-left"><%= t("views.prompt.key.purpose")%></th>
+      <th class="text-left"><%= t("views.prompt.key.created_by")%></th>
+      <th class="text-left"><%= t("views.prompt.key.created_at")%></th>
+      <th class="text-left"><%= t("views.prompt.key.valid_until")%></th>
+      <th class="text-left"><%= t("views.prompt.key.status")%></th>
+      <th class="text-center"><%= t("views.prompt.key.action")%></th>
+    </tr>
+  </thead>
+  <tbody id="list-members">
+    <% keys.each_with_index do |key, index| %>
+      <tr class="text-center">
+        <td><%= (keys.current_page - 1) * keys.limit_value + index + 1 %></td>
+        <td class="truncate-text field-left position-custom" style="max-width: 200px"><%= "**********#{key.key_string.chars.last(4).join}" %></td>
+        <td class="truncate-text field-left position-custom" style="max-width: 130px"><%= key.note %></td>
+        <td class="truncate-text field-left position-custom" style="max-width: 130px"><%= key.user&.name %></td>
+        <td class="truncate-text field-left position-custom js-created-at" style="max-width: 130px"><%= key.created_at %></td>
+        <td class="truncate-text field-left position-custom js-valid-until" style="max-width: 130px"><%= key.valid_until %></td>
+        <td class="truncate-text field-left" style="max-width: 150px" title="status"><%= key.status %></td>
+        <td>
+          <div class="d-flex justify-content-center">
+            <div class="btn-delete pointer <%= user_project_role ? 'disable-btn-custom' : ''%>" data-u-project-role="<%= user_project_role %>" data-href="<%= key_path(key) %>">
+              <i class="fas fa-trash-alt" style="color: #cf1804;"></i>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="card-footer <%= keys.present? ? 'block' : 'none' %>">
+  <div class="demo-inline-spacing d-flex justify-content-end">
+    <div class="pagination">
+      <%= render 'keys/paginate', keys: keys %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.addEventListener("DOMContentLoaded", (event) => {
+    $(document).on('click', '.btn-delete', function(e) {
+      e.preventDefault();
+      const userProjectRole =  $(this).data('u-project-role');
+      if (!userProjectRole) {
+        $("#delete_model").modal('show');
+        $('.btn-ok').attr('href', $(this).attr('data-href'));
+        $('.btn-ok').attr('data-method', 'delete');
+      }
+    });
+  });
+  const createdAtElements = document.querySelectorAll('.js-created-at');
+  const validUntilElements = document.querySelectorAll('.js-valid-until');
+
+  createdAtElements.forEach(element => {
+    element.textContent = convertToLocalTime(element.textContent);
+  });
+
+  validUntilElements.forEach(element => {
+    element.textContent = convertToLocalTime(element.textContent);
+  });
+</script>
+

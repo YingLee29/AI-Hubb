@@ -1,0 +1,9 @@
+<div class="mt-5 controller-action" data-controller="personal-setting">
+  <ul class="nav nav-pills flex-column flex-md-row mb-3">
+    <li class="nav-item">
+      <%= link_to "javascript:void(0);", class: "nav-link account" , data: { action: "click->bases#changeTabAccount",  bases_target: "accountBtn" } do %>
+        <i class="fas fa-user-alt mr-2"></i> <%= t("views.personal_settings.account") %>
+      <% end %>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,4 @@
+$('.select-model').attr('data-max-tokens', <%= @new_max_token %>);
+$('.max_tokens').attr('placeholder',`Must be positive integer and less than ${$(".select-model").attr("data-max-tokens")} with current model`);
+$('.max_tokens').attr('max',`${$(".select-model").attr("data-max-tokens")}`);
+$('.max_tokens').attr('title',`The maximum number of tokens to generate in the completion. The maximum value for max_tokens is ${$(".select-model").attr("data-max-tokens")}`);

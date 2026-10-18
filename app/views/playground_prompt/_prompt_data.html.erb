@@ -1,0 +1,14 @@
+<% @parameter_list&.map do |param| %>
+  <% if param.name == 'prompt' || param.type == 'text'%>
+    <textarea
+      value="<%= render_parameters param %>"
+      rows="10"
+      cols="30"
+      id="<%= param.name %>"
+      class="w-100 border-0 py-2 bg-white h-100 <%= param.name %> completion_prompt_param"
+      style="outline:none;background: transparent;height: calc(100% - 200px);"
+      name="[prompt_input_fields][<%= param.to_param %>][value]"
+      ><%= render_parameters param %></textarea>
+    <% end %>
+<% end %>
+

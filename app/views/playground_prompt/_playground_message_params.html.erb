@@ -1,0 +1,11 @@
+<div class="message-field d-flex py-2 custom-input-prompt border-bottom flex-wrap flex-row">
+  <div class="col-md-3 align-items-center ms-2 flex-item-role col4">
+    <%= select_tag 'messages_params[]role', options_for_select(['user', 'assistant'], message_params['role']), class: 'form-select select-role' %>
+  </div>
+  <%= text_area_tag 'messages_params[]content', message_params['content'], placeholder: t("views.prompt.enter_content"), rows: 3, class: 'form-control mx-2 flex-item bg-white' %>
+  <div class="d-flex align-items-center flex-item-remove justify-content-end">
+    <div class="delete-message pointer me-2 <%= show_deleted ? '' : 'd-none' %>">
+      <i class="fas fa-trash-alt" style="color: #cf1804;"></i>
+    </div>
+  </div>
+</div>

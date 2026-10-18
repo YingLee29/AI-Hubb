@@ -1,0 +1,28 @@
+version: "3.2"
+services:
+  db:
+    image: postgres:15
+    ports:
+      - "54320:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_volumes:/var/lib/postgresql/data
+  redis:
+    image: redis
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle install && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: ${RAILS_ENV}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+volumes:
+  db_volumes:

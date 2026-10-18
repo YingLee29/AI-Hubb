@@ -1,0 +1,8 @@
+$('.change-api').attr('data-api-type', "<%= @api_type %>");
+if ($(".change-api").attr("data-api-type") == 'image_generation' || $(".change-api").attr("data-api-type") == 'image_edit') {
+  $('textarea#prompt').attr('placeholder','Enter text with maximum of length is 1000 characters');
+  $('.n').attr('placeholder','Must be an integer between 1 and 10');
+} else {
+  $('textarea#prompt').attr('placeholder','Enter text');
+  $('.n').attr('placeholder','Must be an integer');
+}

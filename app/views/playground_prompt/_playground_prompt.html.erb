@@ -1,0 +1,167 @@
+<%= form_with url: project_prompt_path(@current_project, @prompt),
+  class: "pb-5 form-inline prompt-form",
+  local: true,
+  id: 'prompt-form',
+  html: { autocomplete: "off" },
+  data: { prompt: @prompt&.to_param },
+  method: :patch do |f| %>
+  <% if !user_project_role %>
+    <div class="d-flex align-items-center justify-content-end" style="transform: translateY(-42px);">
+      <button id="save-prompt" data-action="save" class="btn btn-primary mx-2 <%= user_project_role ? 'disabled' : '' %>"><%= t("views.button.save") %></button>
+    </div>
+  <% end %>
+  <div class="row" style="margin-top: -25px;">
+    <div class="col-6">
+      <div class="mb-2">
+        <label><%= t("views.prompt.form.project") %></label>
+        <input class="form-control custom-input" value="<%= @current_project&.name %>" disabled="disabled" type="text">
+      </div>
+      <div class="mb-2">
+        <label><%= t("views.prompt.form.application_domain") %></label>
+        <div class="w-100">
+          <%= text_field_tag'', @prompt.present? ? @prompt.application_domain : '', class: 'form-control disable-fields', disabled: true %>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label><%= t("views.prompt.form.ip_whitelist") %></label>
+        <div class="w-100 prompt-white-list">
+          <%= text_field_tag'', @prompt.present? ? @prompt.ip_white_list : '', class: 'form-control disable-fields ip-white-list', disabled: true %>
+        </div>
+      </div>
+      <div class="mb-2 prompt">
+        <label><%= t("views.prompt.form.api_endpoint") %></label>
+        <div>
+          <%= f.text_field :endpoint_url,
+            class: "form-control disable-fields",
+            id: "endpoint_url",
+            style: "padding-right: 30px;",
+            :value => @prompt.present? ? @prompt.endpoint_url : "",
+            placeholder: 'API Endpoint URL',
+            data: {
+              domain: ENV['DOMAIN_API']
+            }
+          %>
+          <button type="button" class="copy-url__endpoint me-2 btn-link btn p-0"
+            data-message-copy="copy endpoint URL"
+          >
+            <i class="far fa-copy color-copy"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+   <div class="col-6">
+    <div class="mb-2">
+      <label><%= t("views.prompt.form.name") %> <span class="text-danger">*</span> </label>
+      <div class="w-100">
+        <%= f.text_field :name,
+          class: "form-control custom-input",
+          id: "prompt_name",
+          maxlength: "255",
+          :value => @prompt.present? ? @prompt.name : "",
+          placeholder: t("views.prompt.input_name"),
+          :required => true
+        %>
+        <div class="error-name-content" style="color: red"></span></div>
+      </div>
+    </div>
+    <div class="mb-2">
+      <label><%= t("views.prompt.form.application_endpoint_name") %><span style="color: red">*</span></label>
+      <div class="w-100">
+        <%= f.text_field :endpoint_name,
+          class: "form-control",
+          id: "endpoint_name",
+          maxlength: "255",
+          :value => @prompt.present? ? @prompt.endpoint_name : "",
+          :required => true
+        %>
+        <div class="error-endpoint_name-content" style="color: red"></div>
+      </div>
+    </div>
+    <div class="mb-2">
+      <label><%= t("views.prompt.form.description") %></label>
+      <div class="w-100">
+      <%= f.text_area :description,
+        class: 'form-control',
+        :value => @prompt.present? ? @prompt.description : "",
+        placeholder: t("views.prompt.input_description"), rows: 4 %>
+      </div>
+    </div>
+   </div>
+  </div>
+  <hr/>
+  <div class="row">
+    <div class="prompt-container col-9 row">
+      <%= render partial: 'playground_prompt/playground_show'%>
+    </div>
+    <div class="col-3 content-col-prompt">
+      <div class="mb-2">
+        <label for="gpt">GPT</label>
+        <select class="form-select custom-select" aria-label="Default select example">
+          <option selected>OpenAI</option>
+        </select>
+      </div>
+      <div class="mb-2">
+        <label for="api">API</label>
+        <%= f.select(:ai_api_id, @ai_api.pluck(:name, :public_uid),
+          { selected: @prompt.present? ? @prompt.ai_api.to_param : @ai_api.last.to_param },
+          { :class => "form-select custom-select select-api change-api", :id => "formtabs-country", data: {
+            update_api_type_url: update_api_type_project_prompts_path(project_id: @current_project.to_param) , api_type: @prompt.ai_api&.ai_type } })
+        %>
+      </div>
+      <div class="mb-2 select-model-prompt">
+        <%= render partial: 'select_model'%>
+      </div>
+      <div class="form-inline parameter parameter-list">
+        <%= render partial: 'parameter'%>
+      </div>
+    </div>
+  </div>
+<% end %>
+<div class="d-grid gap-2 mt-4 btn-run-test d-flex flex-row-reverse">
+  <button id="test-prompt" data-action="test-prompt" class="btn btn-primary me-2 py-2 px-4 fw-bold" type="button" <%= @prompt.present? ? ' ' : 'disabled' %>><%= t("views.prompt.test") %></button>
+</div>
+<div class="loader d-none">
+  <div class="loader-circle"></div>
+  <span class="loader-text">Loading...</span>
+</div>
+<script>
+  window.addEventListener("DOMContentLoaded", (event) => {
+  var ipWhiteList = new Choices('.ip-white-list');
+  $(document).on('change', '.select-api', function(e) {
+    const api_id = $(this).val();
+    const action = $(".prompt-form")?.attr('action')
+
+    $.ajax({
+        url: action,
+        data: {
+          ai_api_id: api_id
+        },
+        beforeSend: (xhr) => {
+          const csrfToken = document.querySelector("meta[name='csrf-token']").content;
+          xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+        },
+        type: 'GET',
+        dataType: 'script',
+      });
+  })
+
+  window.scroll({
+    top: 0,
+    left: 0,
+    behavior: "smooth",
+  });
+
+  function handle_validate() {
+    if ($("#prompt_name").val() == '') {
+      $(".error-name-content").removeClass("d-none")
+    } else {
+      $(".error-name-content").addClass("d-none")
+    }
+    if ($("#endpoint_name").val() == '') {
+      $(".error-endpoint_name-content").removeClass("d-none")
+    } else {
+      $(".error-endpoint_name-content").addClass("d-none")
+    }
+  }
+});
+</script>

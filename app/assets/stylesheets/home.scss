@@ -1,0 +1,96 @@
+.section-prompt {
+  .list-prompt {
+    max-width: 75%;
+    margin: 0 auto;
+    .item-prompt:hover,
+    .pointer:hover {
+      cursor: pointer;
+    }
+  }
+
+  .row-custom {
+    padding: 0 12px;
+  }
+  .field-left {
+    text-align: left;
+  }
+  .form-label {
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .custom-input,
+  .custom-select {
+    max-width: 300px;
+  }
+  .custom-select:hover {
+    cursor: pointer;
+  }
+  .response {
+    padding: 0 20px;
+    .title-response {
+      text-align: left;
+    }
+  }
+  .title-table {
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .parameter,
+  .config-api {
+    .parameter-title {
+      width: 135px;
+    }
+  }
+
+  .add-one {
+    text-align: center;
+    font-weight: bolder;
+    cursor: pointer;
+    margin-top: 10px;
+    max-height: 30px;
+  }
+
+  .delete-input {
+    color: white;
+    text-align: center;
+    margin-top: 6px;
+    font-weight: 700;
+    border-radius: 5px;
+    min-width: 20px;
+    cursor: pointer;
+  }
+
+  .ele-parameter {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .dynamic-element {
+    margin-bottom: 10px;
+  }
+
+  .dynamic-stuff {
+    width: calc(100% - 135px);
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+}
+
+.prompt {
+  .disable-fields {
+    pointer-events: none;
+    background-color: #e9ecef;
+  }
+}
+
+.font-0875 {
+  font-size: 0.875rem;
+}
+
+.product-name {
+  font-size: x-large !important;
+  font-weight: 600;
+}

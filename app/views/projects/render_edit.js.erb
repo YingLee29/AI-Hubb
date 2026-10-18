@@ -1,0 +1,39 @@
+$('.select-user-project').html('<%= escape_javascript(render partial: 'select_user') %>')
+name = "<%= @current_project&.name %>"
+description = "<%= @current_project&.description %>"
+const decodeHtmlName = document.createElement('textarea');
+const decodeHtmlDes = document.createElement('textarea');
+decodeHtmlName.innerHTML = name;
+decodeHtmlDes.innerHTML = description
+const project_name = decodeHtmlName.innerText
+const project_des = decodeHtmlDes.innerText
+
+$("#name").val(project_name);
+$("#description").val(project_des);
+$("#application_domain").val("<%= @current_project&.application_domain %>");
+var multipleCancelButton = new Choices("#choices-multiple-remove-button", { removeItemButton: true, allowHTML: true });
+var multipleSelectMember = new Choices("#choices-multiple-members", { removeItemButton: true, allowHTML: true });
+$("#createProject").modal('show');
+
+$("#ip_white_list").val("<%= @current_project&.ip_white_list %>");
+var ipWhiteList = new Choices('#ip_white_list',
+  {
+    removeItemButton: true,
+    allowHTML: true,
+    placeholderValue: 'IP WhiteList',
+    addItemFilter: function(value) {
+      if (!value) {
+        return false;
+      }
+      const regex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/
+      const expression = new RegExp(regex.source, 'i');
+      return expression.test(value);
+    },
+    duplicateItemsAllowed: false,
+    customAddItemText: '<span class="text-danger">Only IP Address values can be added</span>',
+    uniqueItemText: '<span class="text-danger">Only unique values can be added</span>',
+  });
+
+$(document).on("hidden.bs.modal", "#createProject", function () {
+  ipWhiteList.destroy();
+});

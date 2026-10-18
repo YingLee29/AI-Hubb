@@ -1,0 +1,3 @@
+$('.flash_wrapper').html("<%= j render 'shared/messages' %>");
+$('.key-list').html("<%= j render 'list', keys: @keys %>");
+setTimeout(() => $('.flash_wrapper').html(""), 3000);

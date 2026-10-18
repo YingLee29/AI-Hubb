@@ -1,0 +1,68 @@
+<% breadcrumb :prompts %>
+<% provide(:title, t("views.prompt.prompt_management")) %>
+<div class="container-xxl flex-grow-1 container-p-y pt-5" data-controller="prompt">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="title">
+      <h4 class="mb-0 fw-6"><%= t("views.prompt.prompt_management") %></h4>
+    </div>
+  </div>
+    <div class="mb-3 text-end text-right">
+      <%=link_to new_project_prompt_path, class: "btn btn-primary #{ user_project_role ? 'disabled' : ''}" do %>
+        <i class="fa fa-plus mr-2"></i>
+        <%= t("views.prompt.create_prompt") %>
+      <% end %>
+    </div>
+    <div class="mb-3">
+      <%= search_form_for @search, url: project_prompts_path, class: 'd-flex align-content-center justify-content-between' do |f| %>
+        <div class="w-100">
+          <div class="form-group has-search">
+            <span class="fa fa-search form-control-feedback"></span>
+            <input class="form-control" autocomplete="off" type="text" name="keyword"
+              id="user-keyword"
+              value='<%= @keyword if @keyword.present? %>'
+              placeholder="<%= t("views.prompt.prompt_name") %>">
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div style="overflow-x: auto;">
+      <table class="table table-hover table-custom overflow-auto table-bordered">
+        <thead>
+          <tr class="text-center">
+            <th style="width: 7%">No</th>
+            <th class="field-left" style="width: 20%"><%= t("views.prompt.table.prompt_name") %></th>
+            <th class="field-left" style="width: 10%"><%= t("views.prompt.table.project_name") %></th>
+            <th class="field-left" style="width: 20%"><%= t("views.prompt.table.description") %></th>
+            <th class="field-left" style="width: 23%"><%= t("views.prompt.table.end_point_url") %></th>
+            <th class="field-left" style="width: 10%"><%= t("views.prompt.table.action") %></th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0" id="list-services">
+          <% if @prompts.present? %>
+            <%= render partial: 'list'%>
+          <% else %>
+            <tr class="text-center">
+              <td colspan="6">No data</td>
+            </tr>
+          <% end%>
+        </tbody>
+      </table>
+    </div>
+  <div class="card-footer <%= @prompts.present? ? 'block' : 'none' %>">
+    <div class="demo-inline-spacing d-flex justify-content-end">
+      <div class="pagination">
+        <%= render partial: 'paginate'%>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toastsContainerTopRight" class="toast-container position-fixed top-0 end-0 d-none">
+  <div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
+    data-bs-delay="2000">
+    <div class="toast-header d-flex justify-content-start">
+      <div class="toast-body"></div>
+    </div>
+  </div>
+</div>

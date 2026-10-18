@@ -1,0 +1,44 @@
+<% @users.each_with_index do |user, index|  %>
+<tr>
+  <td class="text-center"><%= (@users.current_page - 1) * @users.limit_value + index + 1 %></td>
+  <td style="max-width: 200px" class="text-truncate text-left" title="<%= user.name%>"><%= user.name%></td>
+  <td style="max-width: 300px" class="text-truncate text-left" title="<%= user.email%>"><%= user.email %></td>
+  <td style="max-width: 150px" class="text-truncate text-center" title="<%= user.phone%>"><%= user.phone %></td>
+  <td class="text-capitalize text-center"><%= display_gender(user) %></td>
+  <td class="text-capitalize text-center"><%= t("views.user.role.#{user.role}") %></td>
+  <td class="text-center">
+    <% unless check_current_user_or_representative(user) %>
+      <div class="d-flex justify-content-center field-action">
+        <div type="button"
+          class="text-primary me-3 edit-user-btn " data-toggle="tooltip"
+          data-id="<%= user.to_param %>" data-title="<%= t("views.user.modal.edit_user") %>">
+          <i class="fas fa-pen me-1 line-30"></i>
+        </div>
+      </div>
+    <% end %>
+  </td>
+</tr>
+<% end %>
+
+<%
+=begin%>
+ <!-- Modal -->
+<div class="modal fade" id="modalUser" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title-user" id="deleteUserModalLabel"><%= t("views.user.modal.delete_user") %></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><%= t("views.user.modal.delete_content") %></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= t("views.button.cancel") %></button>
+        <button type="button" id="showToastAnimation" class="btn btn-primary confirm-delete-user"><%= t("views.button.delete") %></button>
+      </div>
+    </div>
+  </div>
+</div>
+<%
+=end%>

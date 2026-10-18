@@ -1,0 +1,151 @@
+<div class="col-12 row h-100">
+ <% if @prompt&.completion_ai_type? %>
+    <% if @user_playground.nil?%>
+      <div class="completion-col col-4 complete-tag d-flex flex-wrap" style="overflow: auto">
+        <div class="w-100 border py-3 px-2 tag-added">
+          <span><%= t("views.prompt.setting_tag_content") %></span>
+        </div>
+        <hr/>
+      </div>
+    <% end %>
+    <div class="border col-8 py-2 completion-col completion-data position-relative">
+      <%= render partial: 'playground_prompt/prompt_data'%>
+    </div>
+  <% elsif @prompt&.chat_completion_ai_type? %>
+    <div class="col-4 border py-2 content-col-prompt chat-completion-col">
+      <div class="mb-3 form-label">
+        <%= t("views.prompt.role.system") %>
+      </div>
+      <%
+      message_params = {}
+      list_message = @prompt.messages_params && eval(@prompt.messages_params)
+      system_message = list_message&.select {|a| a.dig('role') == 'system'}&.dig(-1, 'content')
+      %>
+      <% if !@prompt.messages_params || @prompt.messages_params.empty? %>
+          <div class="d-none">
+            <%= select_tag 'messages_params[]role', options_for_select(['system'], "system"), class: 'form-select select-role' %>
+          </div>
+          <textarea
+            name="messages_params[]content"
+            id="messages_params_content"
+            placeholder="<%= t("views.prompt.enter_content") %>"
+            rows="10"
+            class="w-100 h-90 border-0 bg-white"
+            style="outline:none;background: transparent;"
+            ></textarea>
+            <% if @user_playground.nil?%>
+              <div class="tag-added border d-flex flex-wrap" style="height: 250px; overflow: auto">
+                <div class="d-flex justify-content-between">
+                  <label class="me-3 form-label" for="llm"><%= t("views.prompt.setting_tag_content") %>:</label>
+                  <div class="content-note pointer">
+                    <i class="fa-solid fa-circle-question"></i>
+                  </div>
+                  </div>
+                <hr/>
+              </div>
+            <% end %>
+      <% else %>
+      <% @prompt.messages_params && eval(@prompt.messages_params)&.map&.with_index do |field, index| %>
+            <% if field.dig('role') == 'system'%>
+              <div class="d-none">
+                <%= select_tag 'messages_params[]role', options_for_select(['system'], field['role']), class: 'form-select select-role' %>
+              </div>
+            <textarea
+              name="messages_params[]content"
+              id="messages_params_content"
+              placeholder="<%= t("views.prompt.enter_content") %>"
+              rows="10"
+              style="outline:none;background: transparent;"
+              class="w-100 border-0 bg-white"
+              ><%= system_message&.strip %></textarea>
+              <% if @user_playground.nil?%>
+              <div class="tag-added border d-flex flex-wrap" style="height: 250px; overflow: auto">
+                <div class="w-100">
+                  <div class="d-flex justify-content-between">
+                    <label class="me-3 form-label" for="llm"><%= t("views.prompt.setting_tag_content") %>:</label>
+                    <div class="content-note pointer">
+                      <i class="fa-solid fa-circle-question"></i>
+                    </div>
+                  </div>
+                </div>
+                <hr/>
+              </div>
+              <% end %>
+            <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-8 content-col-prompt overflow-auto d-flex flex-column chat-completion-col">
+      <div class="message-element">
+        <% if !@prompt.messages_params || @prompt.messages_params.empty? %>
+          <%= render 'playground_prompt/playground_message_params', message_params: {}, show_deleted: false %>
+        <% end %>
+        <% @prompt.messages_params && eval(@prompt.messages_params)&.map&.with_index do |field, index| %>
+            <% if field.dig('role') != 'system'%>
+              <%= render 'playground_prompt/playground_message_params', message_params: field, show_deleted: !(index.zero? && eval(@prompt.messages_params).length == 1) %>
+            <% end %>
+        <% end %>
+      </div>
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="py-3 px-2 custom-input-prompt pointer add-message">
+          <i class="fas fa-plus-circle"></i> <%= t("views.prompt.add_message") %>
+        </div>
+        <% if @user_playground.nil?%>
+        <div class="content-note pointer">
+          <i class="fa-solid fa-circle-question"></i>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  <% elsif  @prompt&.edit_ai_type? %>
+    <div class="edit-col col" style="transform: translateY(-25px);">
+      <label>Input</label>
+      <div class="border mb-1" style="height: 60%">
+        <textarea cols="30" rows="10" class="w-100 border-0 p-2" style="outline:none;height: calc(100% - 3.5px);" placeholder="Enter input"></textarea>
+      </div>
+      <label>Instructions</label>
+      <div class="border" style="height: 30%">
+        <textarea cols="30" rows="5" class="w-100 border-0 p-2" style="outline:none;height: calc(100% - 3.5px);" placeholder="Enter instruction"></textarea>
+      </div>
+    </div>
+  <% elsif @prompt&.image_generation_ai_type?%>
+  <div class="image-genaration">
+    <label>Prompt</label>
+    <div class="border" style="height: calc(100% - 21.5px);">
+      <textarea cols="30" rows="10" class="w-100 border-0 p-2 h-100 bg-white" style="outline:none;background: transparent" placeholder="Enter content"></textarea>
+    </div>
+  </div>
+  <% elsif @prompt&.image_edit_ai_type?%>
+  <div class="image-genaration">
+    <label>Prompt</label>
+    <div class="border" style="height: calc(100% - 21.5px);">
+      <textarea cols="30" rows="10" class="w-100 border-0 p-2 h-100 bg-white" style="outline:none;background: transparent" placeholder="Enter content"></textarea>
+    </div>
+  </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  window.addEventListener("DOMContentLoaded", (event) => {
+    $(document).on('click', '.add-message', function() {
+      let parrentEl = $(this).closest('.chat-completion-col');
+      parrentEl.find('.message-element').append(`<%= render 'playground_prompt/playground_message_params', message_params: {}, show_deleted: true %>`);
+      if (parrentEl.find('.message-field').length > 1) {
+        parrentEl.find('.delete-message').removeClass('d-none');
+      } else {
+        if ($("#messages_params_content").length == 0){
+          parrentEl.find('.delete-message').addClass('d-none');
+        }
+      }
+    });
+    $(document).on("click", ".delete-message", function () {
+      let parrentEl = $(this).closest(".align-items-start");
+      $(this).closest(".message-field").remove();
+      if (parrentEl.find(".message-field").length > 1) {
+        parrentEl.find(".delete-message").removeClass("d-none");
+      } else {
+        parrentEl.find(".delete-message").addClass("d-none");
+      }
+    });
+  });
+</script>

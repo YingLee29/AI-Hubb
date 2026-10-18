@@ -1,0 +1,7 @@
+# Additional translations at https://github.com/heartcombo/devise/wiki/I18n
+
+ja:
+  devise:
+    failure:
+      unauthenticated: "ログインもしくはアカウント登録してください。"
+      already_authenticated: "すでにログインしています。"

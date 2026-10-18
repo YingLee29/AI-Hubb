@@ -1,0 +1,130 @@
+<% if @prompt&.chat_completion_ai_type? %>
+ <div class="modal fade model-test_and_save" id="saveAndTestModal" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Test connect to Prompt</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-3">
+          <div class="col-1">
+            <h3>
+              Test
+            </h3>
+          </div>
+          <div class="col-10">
+            <h3 class="fw-bold prompt-name-test">
+              <%= @prompt.name %>
+            </h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="row mb-1">
+              <div class="col-2">
+                <h6 class="fw-bold fst-italic">
+                  Request:
+                </h6>
+              </div>
+              <div class="col-10">
+                <div>
+                </div>
+              </div>
+            </div>
+            <div id="listItems"></div>
+          </div>
+          <div class="col-6">
+            <div class="mb-2">
+              <div class="col-2 fw-bold fst-italic" style="padding-left:0">
+                Response:
+              </div>
+              <div>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <pre class="prompt-test-result show-result__test"></pre>
+              <div class="d-flex justify-content-center hide-loading__test loading-test">
+                <div class="spinner-border" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary run-test-ai">Test Request</button>
+        <button id="save-test" data-ai-type="<%= @prompt.ai_type %>" class="btn btn-primary <%= user_project_role ? 'disabled' : '' %>" type="button">Save</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<% else %>
+  <div class="modal fade model-test_and_save" id="saveAndTestModal" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Test connect to Prompt</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-3">
+          <div class="col-1">
+            <h3>
+              Test
+            </h3>
+          </div>
+          <div class="col-10">
+            <h3 class="fw-bold prompt-name-test">
+              <%= @prompt.name %>
+            </h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="row mb-1">
+              <div class="col-2">
+                <h6 class="fw-bold fst-italic">
+                  Request:
+                </h6>
+              </div>
+              <div class="col-10">
+                <div>
+                </div>
+              </div>
+            </div>
+            <div id="listItems">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="mb-2">
+              <div class="col-2 fw-bold fst-italic" style="padding-left:0">
+                Response:
+              </div>
+              <div>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <pre class="prompt-test-result show-result__test"></pre>
+              <div class="d-flex justify-content-center hide-loading__test loading-test">
+                <div class="spinner-border" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary run-test-ai">Test Request</button>
+        <button id="save-test" data-ai-type="<%= @prompt.ai_type %>"class="btn btn-primary <%= user_project_role ? 'disabled' : '' %>" type="button">Save</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

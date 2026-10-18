@@ -1,0 +1,133 @@
+<% breadcrumb :users%>
+<% provide(:title, t("views.user.user_management")) %>
+<div class="container-xxl flex-grow-1 container-p-y pt-5" data-controller="users">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="title">
+      <h4 class="mb-0 fw-6"><%= t("views.user.user_management") %></h4>
+    </div>
+  </div>
+
+  <div class="my-3">
+    <%= search_form_for @search, url: users_path,
+      class: 'd-flex align-content-center justify-content-between' do |f| %>
+      <div class="w-100">
+        <div class="form-group has-search">
+          <span class="fa fa-search form-control-feedback"></span>
+          <input class="form-control" autocomplete="off" type="text" name="keyword"
+            id="user-keyword"
+            value='<%= @keyword if @keyword.present? %>'
+            placeholder="<%= t("views.user.search_user") %>">
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div style="overflow-x: auto;">
+    <table class="table table-hover table-custom overflow-auto table-bordered">
+      <thead>
+        <tr>
+          <th class="text-center" style="width: 7%">No</th>
+          <th class="text-left" style="width: 17%"><%= t("views.user.table.name") %></th>
+          <th class="text-left" style="width: 25%"><%= t("views.user.table.email") %></th>
+          <th class="text-center" style="width: 15%"><%= t("views.user.table.phone") %></th>
+          <th class="text-center" style="width: 12%"><%= t("views.user.table.gender") %></th>
+          <th class="text-center" style="width: 12%"><%= t("views.user.table.role") %></th>
+          <th class="text-center" style="width: 12%"><%= t("views.user.table.action") %></th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0" id="list-services">
+        <% if @users.present? %>
+          <%= render partial: 'list'%>
+        <% else %>
+          <tr class="text-center">
+            <td colspan="6"><%= t("views.user.table.no_data") %></td>
+          </tr>
+        <% end%>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer <%= @users.present? ? 'block' : 'none' %>">
+    <div class="demo-inline-spacing d-flex justify-content-end">
+      <div class="pagination">
+        <%= render partial: 'paginate'%>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="editUser" tabindex="-1" aria-labelledby="editUserLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createUserLabel"><%= t("views.user.modal.edit_user") %></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <%= form_with url: users_path,
+            method: :post,
+            html: { autocomplete: "off" },
+            local: true, class: "user-form" do |f| %>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="col-sm-12">
+                  <%= f.label :name, t("views.user.table.name") %><span style="color: red">*</span>
+                  <%= f.text_field :name, maxlength: "255", class: "form-control disable-item", placeholder: t("views.user.modal.enter_name") %>
+                  <div class="invalid-feedback error-name-validate custom-text-error">
+                    <span class="error-name-content"></span>
+                  </div>
+                </div>
+                <div class="my-4 col-sm-12">
+                  <%= f.label :email, t("views.user.table.email") %><span style="color: red">*</span>
+                  <%= f.text_field :email, maxlength: "255", class: "form-control disable-item", placeholder: t("views.user.modal.enter_email") %>
+                  <div class="invalid-feedback error-email-validate custom-text-error">
+                    <span class="error-email-content"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="col-sm-12">
+                  <%= f.label :phone, t("views.user.table.phone") %>
+                  <%= f.text_field :phone,
+                    placeholder: t("views.user.modal.enter_phone"),
+                    class: "form-control disable-item",
+                    maxlength: 10 %>
+
+                  <div class="invalid-feedback error-phone-validate custom-text-error">
+                    <span class="error-phone-content"></span>
+                  </div>
+                </div>
+                <div class="row my-4">
+                  <div class="col-sm-6">
+                    <label class="col-sm-12 w-100"><%= t("views.user.table.gender") %></label>
+                    <%= f.select(:gender, [[t("views.user.gender.male"), 'male'], [t("views.user.gender.female"), 'female'], [t("views.user.gender.not_applicable"), 'not_applicable']],
+                      { selected: 'male' },
+                      { :class => "select2 form-select form-control disable-item" }) %>
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="col-sm-12 w-100"><%= t("views.user.table.role") %></label>
+                    <%= f.select(:role, [[t("views.user.role.member"), 'member'], [t("views.user.role.admin"), 'admin']],
+                      { selected: 'member' },
+                      { :class => "select2 form-select form-control" }) %>
+                  </div>
+                </div>
+              </div>
+              <div class="select-project-user">
+                <%= render partial: 'select_project' %>
+              </div>
+            </div>
+            <div class="my-3 modal-footer custom-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= t("views.button.close") %></button>
+              <button type="submit" class="btn btn-primary create-user"><%= t("views.button.save") %></button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toastsContainerTopRight" class="toasts-top-right fixed toast-custom d-none">
+  <div class="bs-toast toast toast-ex animate__animated my-2 toast-content-custom" role="alert" aria-live="assertive" aria-atomic="true"
+    data-bs-delay="2000">
+    <div class="toast-header d-flex justify-content-start">
+      <div class="toast-body"></div>
+    </div>
+  </div>
+</div>

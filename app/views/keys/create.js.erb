@@ -1,0 +1,14 @@
+<% if @key.errors.empty? %>
+  $('#addKey .btn-close').trigger('click');
+  $('.flash_wrapper').html("<%= j render 'shared/messages' %>");
+  $('.key-list').html("<%= j render 'list', keys: @keys %>");
+  $('<a />', {
+    'href' : "<%= download_key_path(@key, format: :csv) %>"
+  }).appendTo('body')
+  .click(function() {
+    $(this).remove()
+  })[0].click();
+  setTimeout(() => $('.flash_wrapper').html(""), 3000);
+<% else %>
+  $('.errors').html("<%= j render 'shared/errors', obj: @key %>");
+<% end %>

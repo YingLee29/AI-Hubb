@@ -1,0 +1,48 @@
+<div class="message-field">
+  <div class="form-group dynamic-element">
+    <div class="row">
+      <div class="col-md-2">
+        Role
+      </div>
+      <div class="col-md-9">
+        <%= select_tag 'messages_params[]role', options_for_select(['system', 'user', 'assistant', 'function'], message_params['role']), class: 'form-select select-role' %>
+      </div>
+      <div class="col-md-1">
+        <div class="delete-message pointer <%= show_deleted ? '' : 'd-none' %>">
+          <i class="fas fa-trash-alt" style="color: #cf1804;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group dynamic-element">
+    <div class="row">
+      <div class="col-md-2">
+        Content
+      </div>
+      <div class="col-md-9">
+        <%= text_area_tag 'messages_params[]content', message_params['content'], placeholder: 'Enter content', rows: 5, class: 'form-control bg-white' %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group dynamic-element function-role <%= message_params["role"] == 'function' ? '' : 'd-none' %>">
+    <div class="row">
+      <div class="col-md-2">
+        Name
+      </div>
+      <div class="col-md-9">
+        <%= text_field_tag 'messages_params[]name', message_params['name'], maxlength: "255", placeholder: 'Enter name', class: 'form-control function-role' %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group dynamic-element function-role <%= message_params['role'] == 'function' ? '' : 'd-none' %>">
+    <div class="row">
+      <div class="col-md-2">
+        Function call
+      </div>
+      <div class="col-md-9">
+        <%= text_area_tag 'messages_params[]function_call', message_params['function_call'], placeholder: 'Enter function call', rows: 5, class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+  <hr/>
+</div>

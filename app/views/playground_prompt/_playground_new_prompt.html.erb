@@ -1,0 +1,120 @@
+<%= form_with url: project_prompts_path,
+  class: "form-inline px-4 py-3 prompt-form",
+  local: true,
+  id: 'prompt-form',
+  html: { autocomplete: "off" },
+  remote: true,
+  method: :post do |f| %>
+  <div class="row">
+    <div class="col-6">
+      <div class="mb-2">
+        <label><%= t("views.prompt.form.project") %></label>
+        <input class="form-control custom-input" value="<%= @current_project&.name %>" disabled="disabled" type="text">
+      </div>
+      <div class="mb-2">
+        <label><%= t("views.prompt.form.name") %> <span class="text-danger">*</span> </label>
+        <div class="w-100">
+          <%= f.text_field :name,
+            class: "form-control custom-input",
+            id: "prompt_name",
+            :value => "",
+            maxlength: "255",
+            placeholder: t("views.prompt.input_name"),
+            :required => true
+          %>
+        <div class="prompt-name-blank"><span class="error-name-content" style="color: red"></span></div>
+      </div>
+      </div>
+      <div class="mb-2">
+        <label for="gpt">GPT</label>
+        <select class="form-select custom-select" aria-label="Default select example">
+          <option selected>OpenAI</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="mb-2">
+        <label class="me-3 form-label" style="width: 60px;" for="api">API</label>
+        <%= f.select(:ai_api_id, @ai_apis.pluck(:name, :public_uid),
+        { selected: @init_api&.to_param || @ai_apis.last&.to_param },
+        { :class => "form-select custom-select select-api change-api", :id => "formtabs-country", data: { url: new_project_prompt_path,
+            update_api_type_url: update_api_type_project_prompts_path(project_id: @current_project.to_param) , api_type: @init_api&.ai_type } }) %>
+      </div> 
+
+      <div class="mb-2 select-model-prompt">
+        <%= render partial: 'select_model'%>
+      </div>
+      <div class="form-inline parameter parameter-list d-none">
+        <%= render partial: 'parameter'%>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="mb-2">
+        <label><%= t("views.prompt.form.description") %></label>
+        <div class="w-100">
+        <%= f.text_area :description,
+          class: 'form-control',
+          :value => @prompt.present? ? @prompt.description : "",
+          placeholder: t("views.prompt.input_description"), rows: 3 %>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label><%= t("views.prompt.form.application_domain") %></label>
+        <div class="w-100">
+          <%= text_field_tag'', @prompt.present? ? @prompt.application_domain : '', class: 'form-control disable-fields', disabled: true %>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label><%= t("views.prompt.form.ip_whitelist") %></label>
+        <div class="w-100 prompt-white-list">
+          <%= text_field_tag'', @prompt.present? ? @prompt.ip_white_list : '', class: 'form-control disable-fields ip-white-list', disabled: true %>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label><%= t("views.prompt.form.application_endpoint_name") %><span style="color: red">*</span></label>
+        <div class="w-100">
+          <%= f.text_field :endpoint_name,
+            class: "form-control",
+            id: "endpoint_name",
+            maxlength: "255",
+            :value => @prompt.present? ? @prompt.endpoint_name : "",
+            :required => true
+          %>
+          <div class="error-endpoint_name-content" style="color: red"></div>
+        </div>
+      </div>
+      <div class="mb-2 prompt">
+        <label><%= t("views.prompt.form.api_endpoint") %></label>
+        <div>
+          <%= f.text_field :endpoint_url,
+            class: "form-control disable-fields",
+            id: "endpoint_url",
+            style: "padding-right: 30px;",
+            :value => @prompt.present? ? @prompt.endpoint_url : "",
+            placeholder: 'API Endpoint URL',
+            data: {
+              domain: ENV['DOMAIN_API']
+            }
+          %>
+          <button type="button" class="copy-url__endpoint me-2 btn-link btn p-0"
+            data-message-copy="copy endpoint URL"
+          >
+            <i class="far fa-copy color-copy"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex align-items-center justify-content-center mt-3">
+    <%= link_to t("views.button.cancel"), project_prompts_path, class: 'btn btn-outline-secondary mx-4' %>
+    <button id="create-prompt" class="btn btn-primary me-4"><%= t("views.button.save") %></button>
+</div>
+<% end %>
+
+<script>
+  window.addEventListener("DOMContentLoaded", (event) => {
+    var ipWhiteList = new Choices('.ip-white-list');
+  });
+</script>

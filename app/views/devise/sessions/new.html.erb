@@ -1,0 +1,62 @@
+<% provide(:title,"Log in") %>
+<div class="login-page d-none">
+  <div class="background text-white">
+    <div class="login-logo mt-2 mb-3">
+      <%= image_tag "logo.png", alt:"LocalID Logo", class: "brand-image img-circle", style:"opacity: .8; margin-bottom: 4px" %>
+      <b>Local</b>
+    </div>
+    <h5 class="pt-2 pb-1 mb-0 text-center"><%= t("views.login.welcome") %></h5>
+    <p class="text-center mb-5"><%= t("views.login.description") %></p>
+    <div class="login-Local login-with-Local d-flex bg-white align-items-center justify-content-center border my-0 mx-auto px-1" style="cursor:pointer;width: 190px; margin: 0 50px" data-Local-id="<%= @login_path %>">
+      <img src="/default/logo.jpg" width="50" height="50">
+      <div style="color: #666666; font-size: 14px">
+        <%= t("views.login.title") %>
+      </div>
+    </div>
+    <div class="mb-2 mt-5 text-center">
+      <a href="" class="me-2 text-white text-decoration-none" onclick="handleChangeLanguage('en')">English</a>
+      <a href="" class="text-white text-decoration-none" onclick="handleChangeLanguage('ja')">日本語</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener("DOMContentLoaded", (event) => {
+    const login = $(".login-Local").data("Local-id");
+    $(document).on('click', '.login-with-Local', function(e) {
+      e.preventDefault();
+      window.location.href = login;
+    })
+    function checkAutoLogin() {
+      const url = `${$(".login-Local").data("Local-id")}&autoLogin=true`;
+      window.location.href = url
+    }
+    $(function() {
+      checkAutoLogin()
+      setTimeout(() => {
+        $(".login-page").removeClass('d-none');
+      }, 2000)
+    })
+  });
+    function handleChangeLanguage(lan) {
+      $.ajax({
+        url: "/language",
+        type: "POST",
+        data_type: "json",
+        beforeSend: (xhr) => {
+          const csrfToken = document.querySelector(
+            "meta[name='csrf-token']"
+          ).content;
+          xhr.setRequestHeader("X-CSRF-Token", csrfToken);
+        },
+        data: {
+          language: lan,
+        },
+      }).done(function (data) {
+          window.location.reload();
+        })
+        .fail(function (e) {
+          console.log(e);
+        });
+    }
+</script>

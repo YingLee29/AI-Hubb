@@ -1,0 +1,30 @@
+<div class="row d-flex justify-content-center selected-user">
+  <label><%= t("views.project.modal.add_project_manager") %></label>
+  <div class="col-md-12 form-select__manager">
+    <select id="choices-multiple-remove-button" class="select-user_manager" placeholder="<%= t("views.project.modal.add_project_manager") %>" multiple name="user_projects_attributes">
+      <% @project_manager&.map do |user| %>
+        <option
+          value="<%= user.to_param %>"
+          <%= is_selected_user(user.id, @user_projects_manager) ? 'selected' : ''%>
+          <%= is_selected_user(user.to_param, @manager_selecte) ? 'selected' : ''%>
+          >
+          <%= user.name %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+  <label class="mt-3"><%= t("views.project.modal.add_project_member") %></label>
+  <div class="col-md-12 form-select__member">
+    <select id="choices-multiple-members" class="select-user_member role-member-list" placeholder="<%= t("views.project.modal.add_project_member") %>" multiple name="user_projects_attributes">
+      <% @project_member&.map do |user| %>
+        <option
+          value="<%= user.to_param %>"
+          <%= is_selected_user(user.id, @user_projects_member) ? 'selected' : ''%>
+          <%= is_selected_user(user.to_param, @member_selecte) ? 'selected' : ''%>
+          >
+          <%= user.name %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+</div>

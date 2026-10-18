@@ -1,0 +1,57 @@
+<% @projects.each_with_index do |project, index|  %>
+<tr class="text-center">
+  <td><%= (@projects.current_page - 1) * @projects.limit_value + index + 1 %></td>
+  <td class="handle-column-project" title="<%= project.name%>">
+    <%=link_to project.name, project_prompts_path(project) %></td>
+  <td class="handle-column-project" title=" <%= project.application_domain %>"><%=  project.application_domain %></td>
+  <td class="handle-column-project" title=" <%= project.description%>"><%=  project.description %></td>
+  <td>
+    <div class="d-flex justify-content-center">
+      <div type="button" class="text-primary edit-project me-3 <%= 'disable-item' if user_project_member(project) %>" data-action="<%= t("views.project.modal.edit_project") %>" data-toggle="tooltip"
+        data-description="<%= project.description %>"
+        data-id="<%= project.to_param %>" data-name="<%= project.name %>">
+        <i class="fas fa-pen me-1 line-30"></i>
+      </div>
+      <div type="button" class="text-danger <%= 'disable-item' if user_project_member(project) %>" id="delete-project" data-toggle="tooltip" data-bs-toggle="modal"
+        data-bs-target="#deleteModal" data-id="<%= project.to_param %>">
+        <i class="fas fa-trash me-1 line-30"></i>
+      </div>
+    </div>
+  </td>
+</tr>
+<% end %>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteProjectModalLabel" aria-hidden="true" data-delete-success="<%= t("views.message.delete_successfully") %>">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteProjectModalLabel"><%= t("views.project.modal.delete_project") %></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><%= t("views.project.modal.delete_content") %></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%= t("views.button.cancel") %></button>
+        <button type="button" id="showToastAnimation" class="btn btn-primary confirm-delete-project"><%= t("views.button.delete") %></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", (event) => {
+      $(document).on("click", ".edit-project", function (e) {
+        e.preventDefault();
+        const action = $(this).data("action");
+        const projectId = $(this).data('id')
+        $("#modal-title").html(action);
+        $("#modal-title").attr("data-action", 'edit')
+        $("#modal-title").attr("data-project", projectId)
+      });
+      $(document).on("click", ".create-project-btn", function (e) {
+        e.preventDefault();
+        const action = $(this).data("action");
+        $("#modal-title").html(action);
+      });
+    })
+  </script>

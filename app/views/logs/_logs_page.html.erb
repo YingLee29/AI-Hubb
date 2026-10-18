@@ -1,0 +1,115 @@
+  <div class="mb-3 top-action">
+    <%= search_form_for @search, url: url,
+      class: 'd-flex align-content-center justify-content-between' do |f| %>
+      <div class="row" style="width: 110%">
+        <div class="col-md-12 mb-3">
+          <div class="form-group has-search">
+            <span class="fa fa-search form-control-feedback"></span>
+            <input class="form-control input-blank__filter" autocomplete="off" type="text" name="keyword"
+              id="log-keyword"
+              value='<%= @keyword if @keyword.present? %>'
+              placeholder="<%= t("views.log.search_placeholder") %>"
+            />
+          </div>
+        </div>
+        <div class="col-md-12 ps-3 mb-3" >
+          <div class="row align-items-center">
+            <div class="col-md-3">
+              <div class="d-flex">
+                <label for="start-date" style="width: 90px;"><%= t("views.log.start_date") %>:</label>
+                <input
+                  class="input-blank__filter"
+                  type="datetime-local"
+                  name="start_date"
+                  id="start_date"
+                  value='<%= @start_date if @start_date.present? %>'
+                  min="<% Date.tomorrow.to_time.strftime('%Y-%m-%dT%H:%M:%S') %>"
+                />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="d-flex">
+                <label for="end-date" style="width: 90px;"><%= t("views.log.end_date") %>:</label>
+                <input
+                  class="input-blank__filter"
+                  type="datetime-local"
+                  name="end_date"
+                  id="end_date"
+                  value='<%= @end_date if @end_date.present? %>'
+                  min="<% Date.tomorrow.to_time.strftime('%Y-%m-%dT%H:%M:%S') %>"
+                  />
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="d-flex justify-content-start btn-search">
+                <button class="btn btn-primary">
+                  <i class="fas fa-search"></i>
+                  <%= t("views.log.search") %>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="d-flex justify-content-end">
+                  <button id="reset-filters" class="reset-filter p-0">
+                    <i class="fas fa-undo"></i>
+                    <%= t("views.log.reset_filter") %>
+                  </button>
+              </div>
+            </div>
+          <div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  </div>
+  <div class="mb-3 download">
+    <div class="d-flex justify-content-end">
+      <button id="download-logs" class="btn btn-primary download-logs" style="height: 28px; padding: 2px 10px;" data-url="<%= download_log_path(format: :zip) %>" data-prompt="<%= @prompt&.public_uid %>">
+            <i class="fas fa-file-download"></i>
+            <%= t("views.log.download") %>
+          </button>
+    </div>
+  </div>
+  <div style="overflow-x: auto;">
+    <table class="table table-hover table-custom overflow-auto table-bordered">
+      <thead>
+        <tr class="text-center">
+          <th> No</th>
+          <th><%= t("views.log.table.created_at") %></th>
+          <th><%= t("views.log.table.ip_address") %></th>
+          <th><%= t("views.log.table.user_agent") %></th>
+          <th><%= t("views.log.table.api_endpoint") %></th>
+          <th><%= t("views.log.table.api_body") %></th>
+          <th><%= t("views.log.table.ai_endpoint") %></th>
+          <th><%= t("views.log.table.ai_body") %></th>
+          <th><%= t("views.log.table.response") %></th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0" id="list-log">
+        <% if @logs.present? %>
+            <%= render partial: 'logs/list'%>
+        <% else %>
+          <tr class="text-center">
+            <td colspan="12"><%= t("views.log.table.no_data") %></td>
+          </tr>
+        <% end%>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer <%= @logs.present? ? 'block' : 'none' %>">
+    <div class="demo-inline-spacing d-flex justify-content-end">
+      <div class="pagination">
+        <%= render partial: 'logs/paginate',  locals: {url: url}%>
+      </div>
+    </div>
+  </div>
+<script>
+window.addEventListener("DOMContentLoaded", (event) => {
+  $("#start_date").on("keydown", function (e) {
+    e.preventDefault();
+  });
+  $('#end_date').on("keydown", function (e) {
+    e.preventDefault();
+  });
+})
+</script>

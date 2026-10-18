@@ -1,0 +1,33 @@
+<% breadcrumb :logs%>
+<% provide(:title, t("views.log.log_management")) %>
+<div class="container-xxl flex-grow-1 container-p-y pt-5 all_log" data-read-more="<%= t("views.log.table.read_more") %>" data-read-less="<%= t("views.log.table.read_less") %>" style="margin-bottom: -16px" data-controller="logs">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="title">
+      <h4 class="mb-3 fw-6"><%= t("views.log.log_management") %></h4>
+    </div>
+  </div>
+  <%= render partial: 'logs_page', locals: {url: logs_path}%>
+  </div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener("DOMContentLoaded", (event) => {
+    $(document).ready(function(){
+      $('.action-more').click(function(){
+        let contentBox = $(this).closest('.show-more__content').find(".show-json")
+        const readmore = $(".all_log").data('read-more')
+        const readless = $(".all_log").data('read-less')
+        if(contentBox.hasClass("readmore")) {
+          $(this).find(".text-more").html(readmore);
+          contentBox.scrollLeft(0);
+          contentBox.removeClass("readmore");
+        } else {
+          contentBox.scrollLeft(0);
+          $(this).find(".text-more").html(readless);
+          contentBox.addClass("readmore");
+        }
+      });
+    });
+  });
+</script>

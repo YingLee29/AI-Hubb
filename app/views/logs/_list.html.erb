@@ -1,0 +1,25 @@
+<% @logs.each_with_index do |log, index|  %>
+<%
+  ai_body_log = log.ai_body == "" ? "{}" : log.ai_body
+  api_body_log = log.api_body == "" ? "{}" : log.api_body
+%>
+<tr>
+  <td class="text-center" style="min-width: 50px" ><%= (@logs.current_page - 1) * @logs.limit_value + index + 1 %></td>
+  <td class="text-left" style="min-width: 170px" title="<%= log.created_at.strftime('%m/%d/%Y')%>"><%= log.created_at.strftime('%m/%d/%Y %H:%M:%S') %></td>
+  <td class="text-left" title="<%= log.ip %>"><%= log.ip %></td>
+  <td class="text-left text-break" style="min-width: 150px" title="<%= log.user_agent%>"><%= log.user_agent %></td>
+  <td class="text-left text-break" style="min-width: 200px" title="<%= log.api_endpoint%>"><%= log.api_endpoint %></td>
+  <td class="text-left" title="<%=  (api_body_log)%>">
+    <pre class="width-overflow"><%=  (api_body_log) %></pre>
+  </td>
+  <td class="text-left text-break" style="min-width: 200px" title="<%= log.ai_endpoint%>"><%= log.ai_endpoint %></td>
+  <td class="show-more__content text-left" title="<%=  (ai_body_log) %>">
+    <pre class="show-json width-overflow"><%=  (ai_body_log) %></pre>
+    <div class="action-more"><a class="text-more"><%= t("views.log.table.read_more") %> </a></div>
+  </td>
+ <td class="show-more__content text-left" style="min-wclassth: 200px" title="<%=  (log.response) %>">
+  <pre class="show-json width-overflow"><%=  (log.response) %></pre>
+  <div class="action-more"><a class="text-more"><%= t("views.log.table.read_more") %> </a></div>
+ </td>
+</tr>
+<% end %>

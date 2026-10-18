@@ -1,0 +1,220 @@
+en:
+  errors:
+    format: "%{message}"
+  home: "Home"
+  log_out: "Logout"
+  activerecord:
+    recordnotfound: "List user is changed! Please try again."
+    errors:
+      models:
+        user:
+          attributes:
+            current_password:
+              blank: "Current password can't be blank"
+              invalid: "Current password is incorrect"
+            password:
+              too_short: "Password is too short (minimum is 6 characters)"
+              too_long: "Password is too long (maximum is 25 characters)"
+              blank: "New password can't be blank"
+              invalid: "Your new password contains invalid characters."
+            password_confirmation:
+              confirmation: "Confirm new password doesn't match New password"
+              blank: "Confirmation new password can't be blank"
+            reset_password_token:
+              invalid: "System errors."
+            name:
+              blank: Name can't be blank
+              invalid: Name is invalid
+              too_long: "Name is too long (maximum is 100 characters)"
+            email:
+              blank: Email can't be blank
+              taken: "This email already exists"
+              not_found: "Email is invalid"
+              invalid: "Email is invalid"
+              too_long: "Email is too long (maximum is 100 characters)"
+              exist: このメールは既に存在しています。
+            phone:
+              not_a_number: "Please enter only integers"
+              wrong_length: "Please enter the phone number in 10 digits 123"
+  views:
+    message:
+      update_self: "Cannot update or delete yourself"
+      data_not_found: "Data not found"
+      update_successfully: "Update successfully"
+      delete_successfully: "Delete successfully"
+      create_successfully: "Create successfully"
+      change_language: "This action reloads the page. All of inputted values will be cleared. Do you want to continue?"
+    button:
+      close: "Close"
+      save: "Save"
+      cancel: "Cancel"
+      delete: "Delete"
+    pagination:
+      first: "« First"
+      last: "Last »"
+      previous: "‹"
+      next: "›"
+    project:
+      pm: "Projects Management"
+      table:
+        project_name: "Projects Name"
+        applicationd_domain: "Application Domain"
+        description: "Description"
+        action: "Action"
+        no_data: "No Data"
+      modal:
+        create_project: "Create Project"
+        edit_project: "Edit Project"
+        ip_whitelist: "IP Whitelist"
+        add_project_manager: "Add Project Manager"
+        add_project_member: "Add Project Member"
+        project_name_validate: "Project Name can't be blank"
+        application_content: "Application Domain can't be blank"
+        ip_whitelist_validate: "Only IP Address values can be added"
+        ip_whitelist_unique: "Only unique values can be added"
+        delete_project: "Delete project"
+        delete_content: "Are you sure you want to delete this project"
+    user:
+      user_management: "User Management"
+      create_user: "Create User"
+      search_user: "Name"
+      table:
+        name: "Name"
+        email: "Email"
+        phone: "Phone"
+        gender: "Gender"
+        role: "Role"
+        action: "Action"
+        no_data: "No Data"
+      role:
+        admin: "Admin"
+        member: "Member"
+      gender:
+        male: "Male"
+        female: "Female"
+        not_applicable: "Not Applicable"
+      modal:
+        create_user: "Create User"
+        edit_user: "Edit User"
+        enter_name: "Enter Name"
+        enter_email: "Enter Email"
+        enter_phone: "Enter Phone"
+        project_manager: "Project Manager"
+        project_member: "Project Member"
+        delete_user: "Delete User"
+        delete_content: "Are you sure you want to delete this user?"
+    log:
+      log_management: "Log Management"
+      search_placeholder: "Search by all fields"
+      search: "Search"
+      download: "Download"
+      start_date: "Start Date"
+      end_date: "End Date"
+      reset_filter: "Reset Filter"
+      table:
+        created_at: "Created at"
+        ip_address: "IP Address"
+        user_agent: "User Agent"
+        api_endpoint: "API Endpoint"
+        api_body: "API Body"
+        ai_endpoint: "AI Endpoint"
+        ai_body: "AI Body"
+        response: "Response"
+        read_more: "Read More"
+        read_less: "Read Less"
+        no_data: "No Data"
+    personal_settings:
+      personal_setting: "Personal Setting"
+      user_infomation: "User Information"
+      change_password: "Change Password"
+      save_change: "Save Changes"
+      current_password: "Current Password"
+      new_password: "New Password"
+      confirm_password: "Confirm Password"
+      password_required: "Password Requirements"
+      min_password: "Minimum length 6-25 characters."
+      valid_password: "Can't enter distance."
+      ja_password: "You cannot enter katakana, hiragana kanji characters."
+      account: "Account"
+    prompt:
+      prompt_management: "Prompt Management"
+      prompt_name: "Prompt Name"
+      prompt_ai_setting: "Prompt AI Settings"
+      create_prompt: "Create Prompt"
+      table:
+        prompt_name: "Prompt Name"
+        project_name: "Project Name"
+        description: "Description"
+        end_point_url: "Endpoint URL"
+        action: "Action"
+      modal:
+        delete_prompt: "Delete Prompt"
+        delete_content: "Do you want to delete this prompt?"
+        note_content: "Note for Content"
+        example: "Example"
+        your_input: "Your input"
+        your_content: "Your content"
+        detele_successfully: "Delete successfully!"
+        create_successfully: "Create successfully!"
+        update_successfully: "Update successfully!"
+      parameter_note:
+        max_tokens: "The maximum number of tokens to generate. The token count of your prompt plus max_tokens cannot exceed the model's context length."
+        temperature: "What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic."
+        top_p: "An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. The maximum value for top_p is 1"
+        n: "How many completions to generate for each prompt. The maximum value for n is 2"
+        logprobs: "Include the log probabilities on the logprobs most likely tokens, as well the chosen tokens. The maximum value for logprobs is 5"
+        stream: "If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as data-only server-sent events as they become available, with the stream terminated by a data: [DONE] message"
+      playground: "Playground"
+      chat: "Chat"
+      api_key: "API call"
+      log: "Log"
+      input_name: "Input Prompt Name"
+      input_description: "Input Prompt Description"
+      parameter: "Parameter"
+      test: "Test"
+      setting_tag_content: "Setting Tag Content"
+      enter_content: "Enter Content"
+      add_message: "Add Message"
+      role:
+        system: "System"
+        user: "User"
+        assistant: "Assistant"
+      form:
+        project: "Project"
+        name: "Name"
+        description: "Description"
+        application_domain: "Application Domain"
+        ip_whitelist: "IP Whitelist"
+        application_endpoint_name: "Application Endpoint Name"
+        api_endpoint: "API Endpoint URL"
+      copy: "Copy endPoint URL successfully!"
+      key:
+        key_management: "Key Management"
+        purpose: "Purpose"
+        created_by: "Created by"
+        created_at: "Created at"
+        valid_until: "Valid Until"
+        status: "Status"
+        action: "Action"
+        add_key: "Add key"
+        note: "Note: The API key is automatically downloaded once only after successful creation."
+        purpose_validate: "Purpose can't be blank"
+    login:
+      welcome: "Welcome to Local AI HUB"
+      description: "Please sign in and start the adventure"
+      title: "Login with Local ID"
+    playground:
+      playground: "Playground"
+      new_playground: "New Playground"
+      remove_playground: "Remove Playground"
+      remove_playground_content: "Playground will be deleted. Do you want to continue?"
+    chat:
+      chat: "Chat"
+      typing_message: "Enter a message"
+      regenerate_message: "Regenerate"
+      download: "Download"
+      new_chat: "New chat"
+      stop_general_chat: "Stop generate"
+      example: "Examples"
+      remove_chat: "Remove Chat"
+      remove_chat_content: "Chat history will be destroyed. Do you want to continue?"

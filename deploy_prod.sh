@@ -1,0 +1,7 @@
+ssh deploy@34.85.84.230 "cd ai-prompt && git checkout main"
+ssh deploy@34.85.84.230 "cd ai-prompt && git checkout ."
+ssh deploy@34.85.84.230 "cd ai-prompt && git pull origin main"
+ssh deploy@34.85.84.230 "docker exec ai-prompt-web-1 bundle install"
+ssh deploy@34.85.84.230 "docker exec ai-prompt-web-1 rails db:migrate"
+ssh deploy@34.85.84.230 "cd ai-prompt && docker compose stop"
+ssh deploy@34.85.84.230 "cd ai-prompt && docker compose up -d"

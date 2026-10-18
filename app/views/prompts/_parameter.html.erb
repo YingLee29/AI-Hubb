@@ -1,0 +1,213 @@
+<div class="d-flex justify-content-between">
+<label class="me-3 form-label" for="llm">Parameter:</label>
+</div>
+<div class="">
+  <% if @prompt&.chat_completion_ai_type? %>
+    <div class="d-flex my-2 align-items-start d-none">
+      <p class="parameter-title add-function pointer" style="margin-left:20px">
+        <i class="fas fa-plus-circle"></i> Add functions
+      </p>
+      <div class="dynamic-stuff functions-params">
+        <% @prompt.functions_params && eval(@prompt.functions_params)&.map do |field| %>
+          <%= render 'prompts/function_params', function_params: field %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% @parameter_list&.map do |param| %>
+    <div class="parameter-props my-2">
+      <% if param.name == 'prompt' || param.name == 'input' || param.name == 'instruction' %>
+      <% elsif param.name == 'max_tokens' || param.name == 'temperature' || param.name == 'top_p' || param.name == 'n' || param.name == 'logprobs'%>
+        <span class="parameter-title"><%= param.name %> <span style="color: red"><%= %w[prompt instruction].include?(param.name) ? '*' : ''%></span></span>
+        <div class = "value-input__dynamic" style="float: right"><%= render_parameters param %></div>
+      <% else %>
+      <span class="parameter-title"><%= param.name %> <span style="color: red"><%= %w[prompt instruction].include?(param.name) ? '*' : ''%></span></span>
+      <% end %>
+      <input value="<%= param.name %>" autocomplete="off" type="hidden" name="[prompt_input_fields][<%= param.to_param %>][name]" id="_prompt_input_fields_<%= param.to_param %>_name">
+      <div class="ele-parameter">
+        <% if param.name == 'prompt' || param.name == 'input' || param.name == 'instruction' %>
+        <% elsif param.name == 'max_tokens' %>
+          <input title="<%= t('views.prompt.parameter_note.max_tokens') %>"
+          type="range" value="<%= render_parameters param %>" class="change-range__action form-range <%= param.name %>" min="0" max="<%= get_max_token_value(@prompt.model) %>" step="2" name="[prompt_input_fields][<%= param.to_param %>][value]" id="_prompt_input_fields_<%= param.to_param %>_value">
+        <% elsif param.name == 'temperature' %>
+          <input title="<%= t('views.prompt.parameter_note.temperature') %>"
+          type="range" value="<%= render_parameters param %>" class="change-range__action form-range <%= param.name %>" min="0" max="2" step="0.02" name="[prompt_input_fields][<%= param.to_param %>][value]" id="_prompt_input_fields_<%= param.to_param %>_value">
+        <% elsif param.name == 'top_p' %>
+          <input title="<%= t('views.prompt.parameter_note.top_p') %>"
+          type="range" value="<%= render_parameters param %>" class="change-range__action form-range <%= param.name %>" min="0" max="1" step="0.02" name="[prompt_input_fields][<%= param.to_param %>][value]" id="_prompt_input_fields_<%= param.to_param %>_value">
+        <% elsif param.name == 'n' %>
+          <input title="<%= t('views.prompt.parameter_note.n') %>"
+          type="range" value="<%= render_parameters param %>" class="change-range__action form-range <%= param.name %>" min="0" max="2" step="1" name="[prompt_input_fields][<%= param.to_param %>][value]" id="_prompt_input_fields_<%= param.to_param %>_value">
+        <% elsif param.name == 'logprobs' %>
+          <input title="<%= t('views.prompt.parameter_note.logprobs') %>"
+          type="range" value="<%= render_parameters param %>" class="change-range__action form-range <%= param.name %>" min="0" max="5" step="1" name="[prompt_input_fields][<%= param.to_param %>][value]" id="_prompt_input_fields_<%= param.to_param %>_value">
+        <% elsif param.name == 'stream' %>
+          <label class="form-check form-switch">
+            <%= hidden_field_tag "[prompt_input_fields][#{param.to_param}][value]", nil %>
+            <input type="checkbox" title="<%= t('views.prompt.parameter_note.stream') %>"
+            value="<%= render_parameters param %>" role="switch" class="form-check-input change-stream <%= param.name %>" name="[prompt_input_fields][<%= param.to_param %>][value]" id="_prompt_input_fields_<%= param.to_param %>_value" <%= render_parameters(param) == "true" ? "checked" : "" %>>
+          </label>
+        <% elsif param.options.present? %>
+          <%= select_tag "[prompt_input_fields][#{param.to_param}][value]", options_for_select(param.options, render_parameters(param)), class: 'form-select' %>
+        <% else %>
+          <input value="<%= render_parameters param %>" maxlength="255" class="form-control <%= param.name %>" type="text" name="[prompt_input_fields][<%= param.to_param %>][value]" id="_prompt_input_fields_<%= param.to_param %>_value">
+        <% end %>
+        <div class="parameter-props"><span class="<%= param.name %>-invalid" style="color: red"></span></div>
+      </div>
+    </div>
+
+  <% end %>
+</div>
+<hr/>
+<div class="form-inline config-api pt-4 d-none">
+  <div class="d-flex my-2 align-items-start">
+    <input value="<%= @prompt&.parameter_list %>" autocomplete="off" type="hidden" name="parameter_list" id="parameter_list">
+  </div>
+</div>
+<% if @prompt&.to_param.present? %>
+<div class="modal fade run-test-ai-modal" id="runTestAI" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Test connect to AI</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-3">
+          <div class="col-1">
+            <h3>
+              Test
+            </h3>
+          </div>
+          <div class="col-10">
+            <h3 class="fw-bold prompt-name-test">
+            </h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="mb-2">
+              <div class="col-2 fw-bold fst-italic" style="padding-left:0">
+                Parameters:
+              </div>
+            </div>
+            <div class="row mb-1">
+              <pre class="request-test-draft m-auto request-test-draft"></pre>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="mb-2">
+              <div class="col-2 fw-bold fst-italic" style="padding-left:0">
+                Response:
+              </div>
+            </div>
+            <div class="row mb-1">
+              <pre class="prompt-test-result-draft d-none"></pre>
+              <div class="loader d-none">
+                <div class="loader-circle"></div>
+                <span class="loader-text">Loading...</span>
+             </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<div class="modal fade note-modal" id="noteContent" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Note for Content</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+       <div class="modal-body">
+        <div class="row mb-3">
+          <div class="col-1">
+            <h5>
+              Example:
+            </h5>
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-5">
+            <div class="mb-2">
+              <div class="col-12 fw-bold fst-italic" style="padding-left:0">
+                Your input: tag1 = something, tag2 = somebody
+              </div>
+            </div>
+            <div class="row mb-1 px-2">
+              <input class="form-control" readonly value="Your content <tag1> <tag2>" >
+            </div>
+          </div>
+          <div class="col-2 justify-content-center d-flex">
+          <i class="fa-solid fa-right-long"></i>
+          </div>
+          <div class="col-5">
+            <div class="mb-2">
+              <div class="col-12 fw-bold fst-italic" style="padding-left:0">
+                Your content:
+              </div>
+            </div>
+             <div class="row mb-1 px-2">
+              <input class="form-control" readonly value="Your content something somebody" >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.addEventListener("DOMContentLoaded", (event) => {
+
+    $(document).on("change", ".change-stream", function (e) {
+      if ($(this).is(':checked')) {
+        $(this).val('true');
+        }
+      else {
+        $(this).val('false');
+      }
+    });
+
+    $(document).on("change", ".change-range__action", function (e) {
+      const ele = $(this).closest(".parameter-props").find(".value-input__dynamic")
+      ele.each((index, element) => {
+        $(element).html(`${$(this).val()}`)
+      })
+    });
+
+    $(document).on('click', '.add-function', function() {
+      $(this).closest('.align-items-start').find('.functions-params').append(`<%= render 'prompts/function_params', function_params: {} %>`);
+    });
+    const inputPlaceholder = "<%= t("views.prompt.enter_content")%>"
+
+    $('.input').attr('placeholder','Enter input');
+    $('.instruction').attr('placeholder','Enter instruction');
+    $('textarea#messages_params_content').attr('placeholder', inputPlaceholder)
+    $('.top_p').attr('placeholder','Must be positive number and less than or equal to 1');
+    $('.temperature').attr('placeholder','Must be positive number and less than or equal to 2');
+    $('.stream').attr('placeholder','Must be boolean (true or false)');
+    $('.logprobs').attr('placeholder','Must be positive integer and less than 5');
+    $('.max_tokens').attr('placeholder',`Must be positive integer and less than ${$(".select-model").attr("data-max-tokens")} with current model`);
+    $('.max_tokens').attr('max',`${$(".select-model").attr("data-max-tokens")}`);
+
+    $(document).on("hidden.bs.modal", ".run-test-ai-modal", function () {
+      $(".prompt-test-result-draft").html("");
+    });
+
+    $(document).on("click", ".content-note", function(){
+      $(".note-modal").modal("show");
+    });
+  });
+</script>

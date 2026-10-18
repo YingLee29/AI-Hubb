@@ -1,0 +1,4 @@
+$('.select-user-project').html('<%= escape_javascript(render partial: 'select_user') %>')
+var multipleCancelButton = new Choices("#choices-multiple-remove-button", { removeItemButton: true });
+var multipleSelectMember = new Choices("#choices-multiple-members", { removeItemButton: true });
+$("#createProject").modal('show');

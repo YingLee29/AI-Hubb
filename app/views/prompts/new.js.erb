@@ -1,0 +1,18 @@
+$('.select-model-prompt').html('<%= escape_javascript(render partial: 'create_select_model') %>');
+$('.parameter-list').html('<%= escape_javascript(render partial: 'parameter') %>');
+if ($(".change-api").attr("data-api-type") == 'image_generation' || $(".change-api").attr("data-api-type") == 'image_edit') {
+  $('textarea#prompt').attr('placeholder','Enter text with maximum of length is 1000 characters');
+  $('.n').attr('placeholder','Must be an integer between 1 and 10');
+} else {
+  $('textarea#prompt').attr('placeholder','Enter text');
+  $('.n').attr('placeholder','Must be an integer');
+}
+$('.top_p').attr('placeholder','Must be positive number and less than or equal to 1');
+$('.temperature').attr('placeholder','Must be positive number and less than or equal to 2');
+$('.stream').attr('placeholder','Must be boolean (true or false)');
+$('.logprobs').attr('placeholder','Must be positive integer and less than 5');
+$('.max_tokens').attr('placeholder',`Must be positive integer and less than ${$(".select-model").attr("data-max-tokens")} with current model`);
+$('.input').attr('placeholder','Enter input');
+$('.instruction').attr('placeholder','Enter instruction');
+$(".completion-data").html('<%= escape_javascript(render partial: 'playground_prompt/prompt_data') %>')
+$('.prompt-container').html('<%= escape_javascript(render partial: 'playground_prompt/playground_show') %>')

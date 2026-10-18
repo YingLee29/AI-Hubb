@@ -1,0 +1,50 @@
+<% breadcrumb :prompt, @prompt %>
+<% provide(:title, t("views.prompt.create_prompt")) %>
+<section data-controller="home" class="section-prompt">
+  <div class="container-xxl pt-5 controller-action" data-controller="prompt-detail">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#home"><%= t("views.prompt.playground") %></a>
+      </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div id="home" class="container tab-pane active"><br>
+        <div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="pb-3">
+              <h4 class="mb-0 fw-6"><%= t("views.prompt.create_prompt") %></h4>
+            </div>
+          </div>
+          <%= render partial: 'playground_prompt/playground_new_prompt' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div id="toastsContainerTopRight" class="toasts-top-right fixed toasts-copy__url toast-custom d-none">
+  <div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
+    data-bs-delay="2000">
+    <div class="toast-header d-flex justify-content-start">
+      <div class="toast-body"></div>
+    </div>
+  </div>
+</div>
+<script>
+  window.addEventListener("DOMContentLoaded", (event) => {
+    if ($(".change-api").attr("data-api-type") == 'image_generation' || $(".change-api").attr("data-api-type") == 'image_edit') {
+      $('textarea#prompt').attr('placeholder','Enter text with maximum of length is 1000 characters');
+      $('.n').attr('placeholder','Must be an integer between 1 and 10');
+    } else {
+      $('textarea#prompt').attr('placeholder','Enter text');
+      $('.n').attr('placeholder','Must be an integer');
+    }
+    $('.top_p').attr('placeholder','Must be positive number and less than or equal to 1');
+    $('.temperature').attr('placeholder','Must be positive number and less than or equal to 2');
+    $('.stream').attr('placeholder','Must be boolean (true or false)');
+    $('.logprobs').attr('placeholder','Must be positive integer and less than 5');
+    $('.max_tokens').attr('placeholder',`Must be positive integer and less than ${$(".select-model").attr("data-max-tokens")} with current model`);
+    $('.input').attr('placeholder','Enter input');
+    $('.instruction').attr('placeholder','Enter instruction');
+  });
+</script>

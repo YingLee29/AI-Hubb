@@ -1,0 +1,96 @@
+.login-page {
+  background-image: url("/default/bg-login.jpeg");
+  -ms-flex-align: center;
+  align-items: center;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 100vh;
+  -ms-flex-pack: center;
+  justify-content: center;
+  background-size: cover;
+  .background {
+    background: rgba(0, 0, 0, 0.3);
+    min-width: 410px;
+    height: 350px;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    .login-logo,
+    .register-logo {
+      font-size: 24px;
+      font-weight: 300;
+      text-align: center;
+    }
+    .size-input {
+      width: 355px;
+    }
+    .color-text-input {
+      color: #666666;
+    }
+    .eye-password {
+      right: 10px !important;
+      transform: translateY(-122%) !important;
+    }
+  }
+}
+.custom-link {
+  a {
+    text-decoration: none;
+    margin: 0 6px;
+  }
+}
+.scroll-personal {
+  max-height: calc(100vh - 74px);
+  overflow-y: auto;
+  .nav-link {
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: #212529;
+    text-decoration: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out;
+  }
+}
+.alert-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.alert-right {
+  right: 0;
+}
+.alert-warning-devise {
+  --bs-alert-color: #664d03;
+  --bs-alert-bg: #ddc67f;
+  --bs-alert-border-color: #ffecb5;
+}
+.password-toggle {
+  width: 45px;
+  cursor: pointer;
+  height: 38px;
+  border-radius: 0px 5px 5px 0px;
+}
+.error-devise {
+  color: #db2000;
+  font-size: 95%;
+  margin-top: 0.25rem;
+  margin-bottom: -15px;
+}
+.change_password .field_with_errors {
+  width: 100%;
+}
+.field_with_errors {
+  width: 100%;
+}
+.input-group-border {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.show-password {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  height: 38px;
+}

@@ -1,0 +1,14 @@
+<div style="display: flex; justify-content: center; transform: translate(0, 50vh);">
+  <span>Processing Authentication...</span>
+</div>
+<script>
+  window.addEventListener("DOMContentLoaded", (event) => {
+    const root_path = "<%= @response&.dig(:root_path) %>";
+    console.log('root_path', root_path);
+     if (root_path) {
+      setTimeout(() => {
+        window.location.href = root_path
+      }, 500)
+     }
+    })
+</script>

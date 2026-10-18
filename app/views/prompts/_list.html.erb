@@ -1,0 +1,39 @@
+<% @prompts.each_with_index do |prompt, index|  %>
+<tr class="text-center">
+  <td><%= (@prompts.current_page - 1) * @prompts.limit_value + index + 1 %></td>
+  <td class="handle-column-prompt" title="<%= prompt.name%>"><%=link_to prompt.name, project_prompt_path(current_project, prompt) %></td>
+  <td class="handle-column-prompt" title="<%= prompt.project.name%>"><%= prompt.project.name %></td>
+  <td class="handle-column-prompt" title="<%= prompt.description%>"><%= prompt.description %></td>
+  <td class="handle-column-prompt" title="<%= prompt.endpoint_url%>"><%= prompt.endpoint_url %></td>
+  <td>
+    <div class="d-flex justify-content-center field-action">
+      <button type="button" class="delete-prompt btn btn-link p-0 text-danger <%= user_project_role ? 'disabled' : '' %>"
+        data-id="<%= prompt.to_param %>" data-project-id="<%= @current_project.to_param %>" data-bs-toggle="modal"
+        data-bs-target="#modalprompt">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+  </td>
+</tr>
+<% end %>
+
+<div class="mt-0">
+  <div class="modal fade" id="modalprompt" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalpromptTitle">Delete prompt</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+          Do you want to delete this prompt?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" id="showToastAnimation" class="btn btn-primary confirm-delete-prompt">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

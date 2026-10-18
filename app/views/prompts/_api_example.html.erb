@@ -1,0 +1,62 @@
+<div class="border p-2 w-100" style="margin-right: 2%; max-height: 250px; overflow: auto">
+  <div class="title-table">API Reference</div>
+  <div class="response">
+    <div class="row">
+      <div class="title-response col-3">
+        API URL
+      </div>
+      <div class="col-8">
+        <p><%= @prompt.endpoint_url %></p>
+      </div>
+    </div>
+    <div class="row my-2">
+      <div class="title-response col-3">
+        HTTP Header
+      </div>
+      <div class="text-truncate w-75 col-8">
+        Bearer <%= '<API Key>' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="title-response col-3">
+        Example request
+      </div>
+      <div class="col-8">
+        <code type="json">
+          {
+            <div class="ms-4">
+              <% if @prompt.image_edit_ai_type? %>
+                "image": "value",<br/>
+                "mask": "value",<br/>
+              <% end %>
+              "request_params": {
+                <% if @prompt.parameter_list %>
+                  <% eval(@prompt.parameter_list)&.map.with_index do |param, idex| %>
+                  <p class='ps-3 m-0'>"<%= param %>": "value"<%= (idex == @prompt.parameter_list.length - 1) ? '' : ','%> <br/></p>
+                  <% end %>
+                <% end %>
+              }
+            </div>
+          }
+        </code>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  window.addEventListener("DOMContentLoaded", (event) => {
+    $(document).ready(function(){
+      $('.action-more').click(function(){
+        let contentBox = $(this).closest('.show-more__content').find(".show-json")
+        if(contentBox.hasClass("readmore")) {
+          $(this).find(".text-more").html('Read more');
+          contentBox.removeClass("readmore");
+        } else {
+          $(this).find(".text-more").html('Read less');
+          contentBox.addClass("readmore");
+        }
+      });
+    });
+  });
+</script>

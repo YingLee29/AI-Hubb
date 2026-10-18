@@ -1,0 +1,65 @@
+<div class="modal fade" id="addKey" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel"><%= t("views.prompt.key.add_key")%></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="errors p-2"></div>
+      <%= form_for(form, html: { remote: true }) do |f| %>
+        <%= f.hidden_field :prompt_id %>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-3">
+              <%= f.label :valid_until, t("views.prompt.key.purpose"), class: 'form-label' %>
+            </div>
+            <div class="col-9">
+              <%= f.text_field :valid_until, type: 'datetime-local', class: 'form-control', min: Date.tomorrow.to_time.strftime('%Y-%m-%dT%H:%M:%S') %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <%= f.label :note, class: 'form-label', for: 'validationCustom01' do %>
+                <%= t("views.prompt.key.purpose")%> <span class="text-danger">*</span>
+              <% end %>
+            </div>
+            <div class="col-9">
+              <%= f.text_area :note, type: 'text-area', class: 'form-control', id: 'validationCustom01' %>
+              <div id="purposeError" class="invalid-feedback" style="display: none; color: red; font-size: 16px">
+                <%= t("views.prompt.key.purpose_validate") %>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 fst-italic"><%= t("views.prompt.key.note")%></div>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <%= f.submit t("views.prompt.key.add_key"), class: 'btn btn-primary', id: 'submitButton' %>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const purposeField = document.getElementById('validationCustom01');
+    const purposeError = document.getElementById('purposeError');
+    const submitButton = document.getElementById('submitButton');
+
+    submitButton.addEventListener('click', function(event) {
+      if (purposeField.value.trim() === '') {
+        event.preventDefault();
+        purposeError.style.display = 'block';
+      } else {
+        purposeError.style.display = 'none';
+      }
+    });
+
+    purposeField.addEventListener('input', function() {
+      purposeError.style.display = purposeField.value.trim() === '' ? 'block' : 'none';
+    });
+  });
+</script>

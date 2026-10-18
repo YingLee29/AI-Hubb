@@ -1,0 +1,121 @@
+$('.select-model-prompt').html('<%= escape_javascript(render partial: 'select_model') %>')
+$('.parameter-list').html('<%= escape_javascript(render partial: 'parameter') %>')
+if ($(".change-api").attr("data-api-type") == 'image_generation' || $(".change-api").attr("data-api-type") == 'image_edit') {
+  $('textarea#prompt').attr('placeholder','Enter text with maximum of length is 1000 characters');
+  $('.n').attr('placeholder','Must be an integer between 1 and 10');
+} else {
+  $('textarea#prompt').attr('placeholder','Enter text');
+  $('.n').attr('placeholder','Must be an integer');
+}
+$('.top_p').attr('placeholder','Must be positive number and less than or equal to 1');
+$('.temperature').attr('placeholder','Must be positive number and less than or equal to 2');
+$('.stream').attr('placeholder','Must be boolean (true or false)');
+$('.logprobs').attr('placeholder','Must be positive integer and less than 5');
+$('.max_tokens').attr('placeholder',`Must be positive integer and less than ${$(".select-model").attr("data-max-tokens")} with current model`);
+$('.input').attr('placeholder','Enter input');
+$('.instruction').attr('placeholder','Enter instruction');
+$(".completion-data").html('<%= escape_javascript(render partial: 'playground_prompt/prompt_data') %>')
+$('.prompt-container').html('<%= escape_javascript(render partial: 'playground_prompt/playground_show') %>')
+
+  function getALLTagFromUserInput() {
+    var parameterList = [];
+    const listContent = document.querySelectorAll("#messages_params_content");
+    const listMessageParName = document.querySelectorAll(
+      "#messages_params_name"
+    );
+    const listMessageParFunC = document.querySelectorAll(
+      "#messages_params_function_call"
+    );
+    const listFunctionName = document.querySelectorAll(
+      "#functions_params_name"
+    );
+    const listFunctionDes = document.querySelectorAll(
+      "#functions_params_description"
+    );
+    const listFunctionPar = document.querySelectorAll(
+      "#functions_params_parameters"
+    );
+    const listParamsPrompt = document.querySelectorAll(
+      ".completion_prompt_param"
+    );
+
+    listMessageParName.forEach(function (i) {
+      var value = $(i).val();
+      parameterList.push(value);
+    });
+    listMessageParFunC.forEach(function (i) {
+      var value = $(i).val();
+      parameterList.push(value);
+    });
+    listFunctionName.forEach(function (i) {
+      var value = $(i).val();
+      parameterList.push(value);
+    });
+    listFunctionDes.forEach(function (i) {
+      var value = $(i).val();
+      parameterList.push(value);
+    });
+    listFunctionPar.forEach(function (i) {
+      var value = $(i).val();
+      parameterList.push(value);
+    });
+    listContent.forEach(function (i) {
+      var value = $(i).val();
+      parameterList.push(value);
+    });
+    listParamsPrompt.forEach(function (i) {
+      var value = $(i).val();
+      parameterList.push(value);
+    });
+
+    return parameterList;
+  }
+  let tagInput = [];
+  const userTyping = getALLTagFromUserInput()?.join(" ");
+  const content  = userTyping || '';
+  let tags = content?.match(/<([^>]+)>/g)?.map((tag) => tag.slice(1, -1));
+  let uniqueTags = Array.from(new Set(tags));
+  if (uniqueTags && uniqueTags.length > 0) {
+    var elements = document.querySelectorAll(".input-tag-complete");
+    elements.forEach(function(element) {
+      element.remove();
+    });
+    uniqueTags.forEach((i, idx) => {
+      $(".complete-tag").append(`
+        <div class="m-2 input-tag-complete form-group" style="width: 95%;">
+          <label class="text-truncate w-100" for="userTagInput">${uniqueTags[idx]}:</label>
+          <textarea class="form-control" type="text" id="userTagInput" value="${ tagInput[idx] != undefined ? tagInput[idx] : ""}rows="3"></textarea>
+        </div>
+      `)
+    });
+  } else {
+    $(".input-tag-complete").remove();
+  }
+
+  let textarea = document.querySelectorAll("#userTagInput");
+  textarea.forEach((i, idx) => {
+    tagInput[idx] = i.value;
+    i.addEventListener("keyup", function () {
+      tagInput[idx] = i.value.trim();
+    });
+  });
+
+  // handle Ctrl+Enter
+  function handleSendMessageWithKeyBoard(dom) {
+    var inputElements = document.querySelectorAll(dom);
+    inputElements.forEach(function(inputElement) {
+      inputElement.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.keyCode === 13) {
+          event.preventDefault();
+          $("#test-prompt").click()
+        }
+      });
+    });
+  }
+
+  handleSendMessageWithKeyBoard('textarea[id="messages_params_content"]')
+  handleSendMessageWithKeyBoard('.completion_prompt_param')
+  handleSendMessageWithKeyBoard('textarea[id="userTagInput"]');
+  $(document).on('click', '.add-message', function(e) {
+    handleSendMessageWithKeyBoard('textarea[id="messages_params_content"]')
+  })

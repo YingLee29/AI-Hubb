@@ -1,0 +1,35 @@
+.no-border:focus {
+  border: 0;
+  outline: none;
+}
+.playground-container {
+  height: calc(100vh - 300px);
+}
+.system-container {
+  height: calc(100% - 3.5rem);
+  resize: none;
+}
+.input-completion:hover {
+  background-color: #ececf1;
+  cursor: pointer;
+}
+
+.playground {
+  .prompt-form {
+    width: 1094px;
+    flex: 1;
+  }
+  .flex-item-role{
+    flex: 1 1 15%;
+  }
+  .h-90 {
+    height: 90% !important;
+  }
+  .content-col-prompt {
+    height: fit-content;
+  }
+  .completion-data {
+    width: 100%;
+  }
+}
+

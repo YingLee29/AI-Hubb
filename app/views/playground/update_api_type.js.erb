@@ -1,0 +1,34 @@
+$('.parameter-list').html('<%= escape_javascript(render partial: 'prompts/parameter') %>')
+$('.select-model').html('<%= escape_javascript(render partial: 'prompts/select_model') %>')
+$('.prompt-container').html('<%= escape_javascript(render partial: 'playground_prompt/playground_show') %>')
+$('.change-api').attr('data-api-type', "<%= @api_type %>");
+if ($(".change-api").attr("data-api-type") == 'image_generation' || $(".change-api").attr("data-api-type") == 'image_edit') {
+  $('textarea#prompt').attr('placeholder','Enter text with maximum of length is 1000 characters');
+  $('.n').attr('placeholder','Must be an integer between 1 and 10');
+} else {
+  $('textarea#prompt').attr('placeholder','Enter text');
+  $('.n').attr('placeholder','Must be an integer');
+}
+$('.top_p').attr('placeholder','Must be positive number and less than or equal to 1');
+$('.temperature').attr('placeholder','Must be positive number and less than or equal to 2');
+$('.stream').attr('placeholder','Must be boolean (true or false)');
+$('.logprobs').attr('placeholder','Must be positive integer and less than 5');
+$('.max_tokens').attr('placeholder',`Must be positive integer and less than ${$(".select-model").attr("data-max-tokens")} with current model`);
+$('.input').attr('placeholder','Enter input');
+$('.instruction').attr('placeholder','Enter instruction');
+   // handle Ctrl+Enter
+  function handleSendMessageWithKeyBoard(dom) {
+    var inputElements = document.querySelectorAll(dom);
+    inputElements.forEach(function(inputElement) {
+      inputElement.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.keyCode === 13) {
+          event.preventDefault();
+          $("#test-prompt").click();
+          $("#test-playground").click();
+        }
+      });
+    });
+  }
+
+  handleSendMessageWithKeyBoard('textarea[id="messages_params_content"]')
+  handleSendMessageWithKeyBoard('.completion_prompt_param')

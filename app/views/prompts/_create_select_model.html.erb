@@ -1,0 +1,8 @@
+<% if @model_list.present? %>
+  <label class="me-3 form-label" style="width: 60px;" for="llm">LLM</label>
+  <select class="form-select custom-select select-model" aria-label="Default select example" name="model" data-url="<%= update_max_tokens_project_prompts_path(project_id: @current_project.to_param) %>" data-max-tokens="<%= get_max_token_value @model_list.last %>">
+    <% @model_list.map do |model| %>
+      <option value="<%= model %>" <%= model.strip == @model_list.last ? 'selected' : '' %>><%= model %></option>
+    <% end%>
+  </select>
+<% end %>

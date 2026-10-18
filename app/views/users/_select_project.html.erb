@@ -1,0 +1,51 @@
+<div class="row selected-user">
+  <div class="col-sm-6">
+  <label><%= t("views.user.modal.project_manager") %></label>
+    <select id="project-manager-select" placeholder="Select project" multiple name="project_manager[]">
+      <% @projects&.map do |project| %>
+        <option value="<%= project.to_param %>" <%= is_selected_project_manager(project.id, @user_projects_manager) ? 'selected' : ''%>><%= project.name %></option>
+      <% end %>
+    </select>
+  </div>
+
+  <div class="col-sm-6">
+  <label><%= t("views.user.modal.project_member") %></label>
+    <select id="project-member-select" placeholder="Select project" multiple name="project_member[]">
+      <% @projects&.map do |project| %>
+        <option value="<%= project.to_param %>" <%= is_selected_project_member(project.id, @user_projects_member) ? 'selected' : ''%>><%= project.name %></option>
+      <% end %>
+    </select>
+  </div>
+</div>
+
+<script>
+  const selectManager = document.getElementById('project-manager-select');
+  const selectMember = document.getElementById('project-member-select');
+
+  const choicesManager = new Choices(selectManager, { removeItemButton: true });
+  const choicesMember = new Choices(selectMember, { removeItemButton: true });
+
+  const options = choicesManager.config.choices.map(item => {
+    return { ...item, selected: false }
+  });
+
+  const updateSelectOptions = (select, choices, availableOptions) => {
+
+    choices.clearChoices();
+    choices.setChoices(availableOptions, 'value', 'label', false);
+  }
+
+  const handleSelectChange = () => {
+    const selectedManager = choicesManager.getValue(true);
+    const selectedMember = choicesMember.getValue(true);
+
+    const availableOptions = options.filter(({ value }) => !selectedManager.includes(value) && !selectedMember.includes(value));
+
+    updateSelectOptions(selectMember, choicesMember, availableOptions);
+    updateSelectOptions(selectManager, choicesManager, availableOptions);
+  }
+
+  selectManager.addEventListener('change',() => handleSelectChange());
+  selectMember.addEventListener('change',() => handleSelectChange());
+  handleSelectChange()
+</script>

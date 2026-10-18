@@ -1,0 +1,39 @@
+<div class="message-field">
+  <div class="form-group dynamic-element">
+    <div class="row">
+      <div class="col-md-2">
+        Name <span style="color: red">*</span>
+      </div>
+      <div class="col-md-9">
+        <%= text_field_tag 'functions_params[]name', function_params['name'], placeholder: 'Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64',class: 'form-control' %>
+        <div class="function-blank"><span class="error-function-content" style="color: red"></span></div>
+      </div>
+      <div class="col-md-1">
+        <div class="delete-function pointer">
+          <i class="fas fa-trash-alt" style="color: #cf1804;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group dynamic-element function-role">
+    <div class="row">
+      <div class="col-md-2">
+        Description
+      </div>
+      <div class="col-md-9">
+        <%= text_field_tag 'functions_params[]description', function_params['description'],  placeholder: 'Enter description', maxlength: "255", class: 'form-control function-role' %>
+      </div>
+    </div>
+  </div>
+  <div class="form-group dynamic-element function-role">
+    <div class="row">
+      <div class="col-md-2">
+        Parameters
+      </div>
+      <div class="col-md-9">
+        <%= text_area_tag 'functions_params[]parameters', function_params['parameters'], placeholder: 'Enter parameters', rows: 5, class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+  <hr/>
+</div>

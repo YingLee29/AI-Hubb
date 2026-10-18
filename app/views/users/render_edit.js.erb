@@ -1,0 +1,14 @@
+$('.select-project-user').html('<%= escape_javascript(render partial: 'select_project') %>')
+name = "<%= @user&.name %>"
+email = "<%= @user&.email %>"
+phone = "<%= @user&.phone %>"
+role = "<%= @user&.role %>"
+gender = "<%= @user&.gender %>"
+
+$("#name").val(name);
+$("#email").val(email);
+$("#phone").val(phone);
+$("#role").val(role);
+$("#gender").val(gender);
+
+$("#editUser").modal('show');

@@ -1,0 +1,21 @@
+.selected-user {
+  .choices__inner,
+  .choices__input {
+    background-color: #fff;
+  }
+  .choices__inner {
+    max-height: 105px;
+    overflow-y: auto;
+  }
+  .choices__list--multiple .choices__item {
+    background-color: #0b5ed7 !important;
+    border: 1px solid #0b5ed7 !important;
+  }
+}
+.handle-column-project {
+  text-align: start !important;
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

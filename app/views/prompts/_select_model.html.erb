@@ -1,0 +1,8 @@
+<% if @model_list.present? %>
+  <label class="me-3 form-label" style="width: 60px;" for="llm">LLM</label>
+  <select class="form-select custom-select select-model" aria-label="Default select example" name="model" data-url="<%= playground_update_max_tokens_path %>" data-max-tokens="<%= get_max_token_value @prompt.model %>">
+    <% @model_list.map do |model| %>
+      <option value="<%= model %>" <%= model.strip == @prompt.model ? 'selected' : '' %>><%= model %></option>
+    <% end%>
+  </select>
+<% end %>

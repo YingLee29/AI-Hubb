@@ -1,0 +1,83 @@
+<% breadcrumb :user%>
+<% provide(:title,"Personal Setting") %>
+<div class="container-xxl scroll-personal" id="personal-information" data-controller="bases">
+  <%= render "buttonChange" %>
+  <!--Account-->
+  <div class="card mb-4 mt-3 change_info d-none" data-bases-target="account">
+    <h5 class="card-header fw-6"><%= t("views.personal_settings.user_infomation") %></h5>
+    <div class="card-body">
+      <div class="d-flex align-items-start align-items-sm-center gap-4">
+        <img
+          src="/default/person.png"
+          alt="user-avatar"
+          class="d-block rounded"
+          height="100"
+          width="100"
+          id="3"
+        />
+      </div>
+    </div>
+        <hr class="my-0" />
+    <div class="card-body">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <div class="d-flex" >
+              <%= f.label t("views.user.table.name"), class: "form-label" %>
+              <span style="color: red; margin-left: 3px">*</span>
+            </div>
+            <%= f.text_field :name, autofocus: true, class: "form-control text-truncate"%>
+            <p class='error-devise'><%= show_errors(resource, :name) %></p>
+          </div>
+          <div class="mb-3 col-md-6">
+            <%= f.label t("views.user.table.email"), class: "form-label"  %>
+            <%= f.email_field :email, autofocus: true, class: "form-control", disabled: true %>
+          </div>
+          <div class="mb-3 col-md-6">
+            <%= f.label t("views.user.table.phone"), class: "form-label" %>
+            <%= f.text_field :phone, autofocus: true, class: "form-control", id: "phone-input" %>
+            <p class='error-devise'><%= show_errors(resource, :phone) %></p>
+          </div>
+          <div class="mb-3 col-md-6">
+            <%= f.label t("views.user.table.role"), class: "form-label" %>
+            <%= f.text_field :role, autofocus: true, class: "form-control", disabled: true %>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="form-group">
+              <label class="col-form-label" for="formtabs-country"><%= t("views.user.table.gender") %></label>
+              <div class="custom-select-wrapper">
+                <%= f.select(:gender, [[t("views.user.gender.male"), 'male'],
+                  [t("views.user.gender.female"), 'female'],
+                  [t("views.user.gender.not_applicable"), 'not_applicable']],
+                  { selected: current_user&.gender },
+                  { class: "form-control custom-select" }) %>
+                <i class="fas fa-caret-down"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-2">
+          <%= link_to t("views.button.cancel"), :back, class: "btn btn-secondary mr-2" %>
+          <%= f.submit t("views.personal_settings.save_change"), class: "btn btn-primary update-account"  %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script>
+  window.addEventListener("DOMContentLoaded", (event) => {
+    $(".password-toggle").on("click", function (e) {
+      e.preventDefault();
+      const $this = $(e.currentTarget)
+      const passwordField =$this.closest('.form-password-toggle').find('.show-password');
+      const icon = $this.find("i");
+      if (icon.hasClass("fa-eye")) {
+        icon.removeClass("fa-eye").addClass("fa-eye-slash");
+        passwordField.attr("type", "password");
+      } else {
+        icon.removeClass("fa-eye-slash").addClass("fa-eye");
+        passwordField.attr("type", "text");
+      }
+    });
+  });
+</script>
